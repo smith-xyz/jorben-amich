@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  aquinas-bot:
+    image: aquinas-bot
+    container_name: aquinas-bot
+    hostname: aquinas-bot
+    build:
+      dockerfile: ./apps/aquinas-bot/Dockerfile
+    env_file:
+      - ./apps/aquinas-bot/.env
+    ports:
+      - 4201:4200
+    volumes:
+      - /app/node_modules
+      
+networks:
+  default:
+    name: prod_network
+    driver: bridge

@@ -1,0 +1,108 @@
+{
+  "name": "aquinas-bot",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/aquinas-bot/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/aquinas-bot",
+        "format": [
+          "cjs"
+        ],
+        "bundle": false,
+        "main": "apps/aquinas-bot/src/main.ts",
+        "tsConfig": "apps/aquinas-bot/tsconfig.app.json",
+        "assets": [
+          {
+            "glob": "/*",
+            "input": "apps/aquinas-bot/src/assets/summa-theologica",
+            "output": "apps/aquinas-bot/src/assets/summa-theologica"
+          },
+          {
+            "glob": "/*",
+            "input": "apps/aquinas-bot/src/assets/thumbnails",
+            "output": "apps/aquinas-bot/src/assets/thumbnails"
+          }
+        ],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "aquinas-bot:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "aquinas-bot:build:development"
+        },
+        "production": {
+          "buildTarget": "aquinas-bot:build:production"
+        }
+      }
+    },
+    "deploy-commands": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx run aquinas-bot:build",
+          "node dist/apps/aquinas-bot/apps/aquinas-bot/src/deploy-commands.js"
+        ],
+        "parallel": false
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "apps/aquinas-bot/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "apps/aquinas-bot/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}

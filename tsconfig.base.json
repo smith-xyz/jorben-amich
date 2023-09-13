@@ -8,15 +8,18 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
+    "esModuleInterop": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2017", "dom"],
+    "lib": ["es2017", "ESNext", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
       "@components": ["libs/components/src/index.ts"],
-      "@hooks": ["libs/hooks/src/index.ts"]
+      "@hooks": ["libs/hooks/src/index.ts"],
+      "@shared/clients": ["libs/shared/clients/src/index.ts"],
+      "@shared/utilities": ["libs/shared/utilities/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
