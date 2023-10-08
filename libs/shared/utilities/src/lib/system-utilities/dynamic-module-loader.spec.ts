@@ -1,4 +1,4 @@
-import { dynamicModuleLoader } from './dynamic-module-loader';
+import { dynamicModulesLoader } from './dynamic-module-loader';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -17,7 +17,7 @@ function reset(dirName: string) {
   }
 }
 
-describe('dynamicModuleLoader', () => {
+describe('dynamicModulesLoader', () => {
   beforeAll(async () => {
     reset(testDir);
     fs.mkdirSync(testDir);
@@ -28,7 +28,7 @@ describe('dynamicModuleLoader', () => {
     reset(testDir);
   });
   it('should load modules from provided directory', () => {
-    const modules = dynamicModuleLoader<{
+    const modules = dynamicModulesLoader<{
       test: boolean;
       testFn: () => boolean;
     }>(testDir);

@@ -1,0 +1,9 @@
+{
+    "summa-theologica": {
+        "type": "better-sqlite3",
+        "database": "/path/to/db/summa-theologica.db",
+        "logging": [
+            "error"
+        ]
+    }
+}

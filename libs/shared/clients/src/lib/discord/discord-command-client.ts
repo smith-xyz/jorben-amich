@@ -2,11 +2,11 @@ import {
   Client,
   ClientOptions,
   Collection,
-  SlashCommandBuilder,
+  RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord.js';
 
 export interface Command {
-  data: SlashCommandBuilder;
+  data: RESTPostAPIChatInputApplicationCommandsJSONBody;
   messageTrigger?: (message: string) => boolean;
   execute: (...args: unknown[]) => Promise<void>;
 }

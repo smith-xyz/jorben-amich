@@ -1,0 +1,7 @@
+{
+    "aquinas-bot": {
+        "token": "secrts",
+        "clientId": "secrets",
+        "guildId": "secrets"
+    }
+}
