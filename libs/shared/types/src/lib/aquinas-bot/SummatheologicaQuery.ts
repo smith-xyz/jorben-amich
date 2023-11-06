@@ -1,4 +1,4 @@
-import { PartValue, SubSection } from '@database';
+import { PartValue, SubSection } from '@models';
 
 export interface SummaTheologicaQuery {
   part: PartValue;

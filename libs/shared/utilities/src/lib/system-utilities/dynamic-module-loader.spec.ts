@@ -2,7 +2,7 @@ import { dynamicModulesLoader } from './dynamic-module-loader';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const testDir = __dirname + '/test_temp';
+const testDir = __dirname + '/test_temp_dml';
 const testModuleOne = `
   module.exports = { test: true, testFn: () => true }
 `;

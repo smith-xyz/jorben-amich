@@ -1,1 +1,1 @@
-export * from './aquinas';
+export * from './aquinas-bot';

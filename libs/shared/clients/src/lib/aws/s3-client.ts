@@ -1,5 +1,5 @@
 export class S3Client {
-    constructor() {
-        throw new Error("not implemented")
-    }
+  constructor() {
+    throw new Error('not implemented');
+  }
 }

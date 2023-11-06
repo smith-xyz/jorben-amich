@@ -1,8 +1,4 @@
-import express, {
-  Express,
-  Response,
-  RequestHandler,
-} from 'express';
+import express, { Express, Response, RequestHandler } from 'express';
 
 interface HttpServerOptions {
   name: string;

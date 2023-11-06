@@ -1,30 +1,11 @@
-import {
-  Article,
-  ArticleContent,
-  Part,
-  Question,
-  PartPrologue,
-  Prologue,
-  QuestionPrologue,
-} from './summa-theological';
+import SummaTheologicaDb from './summa-theologica/SummaTheologica.database';
 
 /**
  * @description object that will reference data storage that will be a specific work
  */
 export const aquinasDatabase = {
-  'summa-theologica': {
-    entities: [
-      Article,
-      ArticleContent,
-      Part,
-      Question,
-      PartPrologue,
-      QuestionPrologue,
-      Prologue,
-    ],
-    // in the future if you need to add migrations we can add them here
-  },
+  'summa-theologica': SummaTheologicaDb,
 };
 
-/** exposing entities */
-export * from './summa-theological';
+/** exposing configs */
+export * from './summa-theologica';

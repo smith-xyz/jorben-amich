@@ -38,14 +38,12 @@
     },
     "serve": {
       "executor": "@nx/js:node",
-      "defaultConfiguration": "development",
+      "defaultConfiguration": "production",
       "options": {
-        "buildTarget": "discord-command-deploy:build"
+        "buildTarget": "discord-command-deploy:build",
+        "watch": false
       },
       "configurations": {
-        "development": {
-          "buildTarget": "discord-command-deploy:build:development"
-        },
         "production": {
           "buildTarget": "discord-command-deploy:build:production"
         }

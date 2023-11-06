@@ -9,6 +9,7 @@ ARG DB_CONFIG_FILE
 WORKDIR /bot
 COPY ./dist/apps/aquinas-bot .
 COPY ./config ./config
+# for local sqlite db
 COPY ./db ./db
 
 ENV APP_VERSION=${APP_VERSION}

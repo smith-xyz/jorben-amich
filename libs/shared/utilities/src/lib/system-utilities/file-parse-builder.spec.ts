@@ -2,7 +2,7 @@ import { fileParseBuilder } from './file-parse-builder';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const testDir = path.join(__dirname, '/test_temp');
+const testDir = path.join(__dirname, '/test_temp_fp');
 const testFile1 = `
 -----
 

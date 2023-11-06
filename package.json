@@ -5,9 +5,8 @@
   "scripts": {
     "build:aquinas-bot": "nx run aquinas-bot:build",
     "serve:aquinas-bot": "nx run aquinas-bot:serve",
-    "deploy:aquinas-bot": "nx run aquinas-bot:deploy-commands",
-    "ci": "nx run-many --targets=lint,test,build",
-    "test": "nx run-many -t test"
+    "deploy-slash-commands": "nx run discord-command-deploy:serve",
+    "migration-generation:aquinas-bot": "nx run aquinas-bot:migration-generate"
   },
   "private": true,
   "dependencies": {
@@ -65,7 +64,7 @@
     "prettier": "^2.6.2",
     "react-refresh": "^0.10.0",
     "ts-jest": "29.1.1",
-    "ts-node": "10.9.1",
+    "ts-node": "^10.9.1",
     "typescript": "5.1.6",
     "url-loader": "^4.1.1"
   },

@@ -1,5 +1,5 @@
 import { AppCtx, AppDbConfigMap } from '../common';
-import { DataSource, DataSourceOptions } from 'typeorm';
+import { DataSource, DataSourceOptions, Entity } from 'typeorm';
 
 export type AquinasBotAppName = 'aquinas-bot';
 
@@ -12,5 +12,5 @@ export type AquinasBotAppCtx = AppCtx<AquinasBotDatabase>;
 export type AquinasBotDbConfig = AppDbConfigMap<
   AquinasBotAppName,
   AquinasBotDatabaseName,
-  DataSourceOptions
+  () => DataSourceOptions
 >;

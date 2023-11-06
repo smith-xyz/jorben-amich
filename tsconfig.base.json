@@ -18,8 +18,10 @@
     "paths": {
       "@database": ["libs/database/src/index.ts"],
       "@discord": ["libs/discord/src/index.ts"],
+      "@models": ["libs/models/src/index.ts"],
       "@service": ["libs/service/src/index.ts"],
       "@shared/clients": ["libs/shared/clients/src/index.ts"],
+      "@shared/database": ["libs/shared/database/src/index.ts"],
       "@shared/test-utils": ["libs/shared/test-utils/src/index.ts"],
       "@shared/types": ["libs/shared/types/src/index.ts"],
       "@shared/utilities": ["libs/shared/utilities/src/index.ts"]

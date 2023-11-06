@@ -1,6 +1,6 @@
 {
-    "name": "Debug Node App",
-    "type": "node",
-    "request": "attach",
-    "port": 7777
-  }
+  "name": "Debug Node App",
+  "type": "node",
+  "request": "attach",
+  "port": 7777
+}

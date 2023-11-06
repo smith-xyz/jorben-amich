@@ -1,1 +1,1 @@
-export * from "./discord-command-client"
+export * from './discord-command-client';

@@ -1,0 +1,179 @@
+version: 2.1
+orbs:
+  nx: nrwl/nx@1.6.2
+  aws-cli: circleci/aws-cli@4.0
+  aws-ecr: circleci/aws-ecr@9.0
+  aws-ecs: circleci/aws-ecs@4.0
+jobs:
+  # nx-ci
+  # run for all build pipelines since this is a monorepo
+  # ensures all projects are not impacted by change
+  # This will attach to workspace to be used across jobs
+  nx-ci:
+    docker:
+      - image: cimg/node:20.6.1
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - '1e:d7:30:30:25:4a:a6:55:93:01:34:51:e2:df:17:bb'
+      - checkout
+      - nx/set-shas
+      - run:
+          command: npm install
+          name: Install dependencies
+      - nx/set-shas
+      - run:
+          command: npx nx format:check
+          name: nx format check
+      - run:
+          command: npx nx affected --base=$NX_BASE --head=$NX_HEAD -t lint --parallel=3
+          name: Run lint affected
+      - run:
+          command: npx nx affected --base=$NX_BASE --head=$NX_HEAD -t test --parallel=3
+          name: Run Unit Tests affected
+      - run:
+          command: npx nx affected --base=$NX_BASE --head=$NX_HEAD -t build --parallel=3
+          name: Run Build affected
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+  # currently just to create any json config files to be used
+  create-config-files:
+    docker:
+      - image: cimg/node:20.6.1
+    steps:
+      - attach_workspace:
+          at: .
+      - run: mkdir -p config
+      # db config for all apps
+      - run: echo "${DB_CONFIG}" | cat >> ./config/db.config.json
+      # discord config for slash command deployments
+      - run: echo "${DISCORD_BOTS_CONFIG}" | cat >> ./config/discord-bots.config.json
+      - run: ls config
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+  # run typeorm database migrations
+  # create one for each app
+  aquinas-bot-database-migrations:
+    docker:
+      - image: cimg/node:20.6.1
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          command: npx nx run aquinas-bot:migration-run
+          name: aquinas-bot db migrations
+      # think the persist is needed for sqlite databases, want to make sure we attach those to projects
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+  deploy-discord-bot-slash-commands:
+    docker:
+      - image: cimg/node:20.6.1
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          command: npx nx run discord-command-deploy:serve
+          name: deploy slash commands
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+  # run docker builds and push to aws ecr
+  # create a job for each app
+  aquinas-bot-build-push-ecr:
+    machine:
+      image: ubuntu-2204:2022.07.1
+    steps:
+      - attach_workspace:
+          at: .
+      - aws-ecr/build_and_push_image:
+          # build aquinas bot app
+          attach_workspace: true
+          account_id: ${AWS_ACCOUNT_ID}
+          auth:
+            - aws-cli/setup:
+                role_arn: ${AWS_ROLE_ARN}
+          dockerfile: apps/aquinas-bot/Dockerfile
+          extra_build_args: |
+            --build-arg APP_VERSION="${AQUINAS_BOT_APP_VERSION}" 
+            --build-arg DISCORD_TOKEN="${AQUINAS_BOT_DISCORD_TOKEN}" 
+            --build-arg DISCORD_CLIENT_ID="${AQUINAS_BOT_DISCORD_CLIENT_ID}" 
+            --build-arg ASSETS_DIR="${AQUINAS_BOT_ASSETS_DIR}" 
+            --build-arg DB_CONFIG_FILE="${DB_CONFIG_FILE}"
+          path: .
+          platform: linux/amd64
+          push_image: true
+          region: ${AWS_REGION}
+          repo: aquinas-bot
+          tag: 'latest,v0.1.${CIRCLE_BUILD_NUM}'
+          workspace_root: .
+  aquinas-bot-ecs-service-update:
+    machine:
+      image: ubuntu-2204:2022.07.1
+    steps:
+      - aws-cli/setup:
+          region: ${AWS_REGION}
+          role_arn: ${AWS_ROLE_ARN}
+          role_session_name: aquinas-bot-session-ecs-update
+          session_duration: '3600'
+      - aws-ecs/update_service:
+          cluster: aquinas-bot
+          container_image_name_updates: container=aquinas-bot,tag=latest
+          family: aquinas-bot-latest
+          service_name: aquinas-bot-prod
+          force_new_deployment: true
+workflows:
+  discord_bots:
+    jobs:
+      - nx-ci
+      - create-config-files:
+          requires:
+            - nx-ci
+          filters:
+            branches:
+              only:
+                - /.*\/release.*/ # matches any release branch
+      - aquinas-bot-database-migrations:
+          requires:
+            - create-config-files
+          filters:
+            branches:
+              only:
+                - /aquinas-bot\/release.*/
+      - aquinas-bot-build-push-ecr:
+          requires:
+            - nx-ci
+            - create-config-files
+            - aquinas-bot-database-migrations
+          filters:
+            branches:
+              only:
+                - /aquinas-bot\/release.*/
+          context: aws-dev
+      - aquinas-bot-ecs-service-update:
+          requires:
+            - nx-ci
+            - create-config-files
+            - aquinas-bot-database-migrations
+            - aquinas-bot-build-push-ecr
+          filters:
+            branches:
+              only:
+                - /aquinas-bot\/release.*/
+          context: aws-dev
+      - deploy-discord-bot-slash-commands:
+          requires:
+            - create-config-files
+            - aquinas-bot-database-migrations
+            - aquinas-bot-build-push-ecr
+            - aquinas-bot-ecs-service-update
+          filters:
+            branches:
+              only:
+                - /.*\/release.*/ # matches any release branch

@@ -13,6 +13,17 @@ import {
   DiscordBotNames,
 } from '@shared/types';
 
+const missing = ['DISCORD_BOTS_CONFIG_FILE'].filter(
+  (variable) =>
+    !process.env[variable] ||
+    (typeof process.env[variable] === 'string' &&
+      process.env[variable].length === 0)
+);
+
+if (missing.length) {
+  throw new Error(`Missing environment variables: ${missing.join(',')}`);
+}
+
 (async () => {
   const botsConfig = FileUtils.readJSONFile<
     DiscordBotConfigMap<AquinasBotAppName>

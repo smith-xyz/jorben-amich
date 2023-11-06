@@ -1,5 +1,5 @@
 import { SummaTheologicaBuilder } from '@service';
-import { Part, PartValue } from '@database';
+import { Part, PartValue } from '@models';
 import { PathUtils } from '@shared/utilities';
 import fs from 'fs';
 import { DataSource } from 'typeorm';

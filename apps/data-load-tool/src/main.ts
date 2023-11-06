@@ -2,7 +2,6 @@ import { database } from '@database';
 import { FileUtils, PathUtils } from '@shared/utilities';
 import { AppDbConfigMap } from '@shared/types';
 import { apps } from './data-loaders';
-import { DataSource } from 'typeorm';
 
 const dbConfig = FileUtils.readJSONFile<AppDbConfigMap>(
   PathUtils.resolveToCwd(process.env.DB_CONFIG_FILE)
@@ -23,12 +22,8 @@ async function configIterator<T = void>(
 }
 
 async function loadDbData(appName: string, dbName: string) {
-  const db = new DataSource({
-    ...dbConfig[appName][dbName],
-    ...database[appName][dbName],
-  });
+  const db = database[appName][dbName];
   await db.initialize();
-  await db.synchronize(true);
   const loader = apps[appName][dbName];
   loader && (await loader(appName, dbName, db));
 }

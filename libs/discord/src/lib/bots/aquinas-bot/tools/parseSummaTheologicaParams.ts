@@ -1,7 +1,7 @@
 import { ChatInteraction } from '@shared/utilities';
 import { SummaTheologicaQuery } from '@shared/types';
 import { ChatInputCommandInteraction, Message } from 'discord.js';
-import { PartValue, SubSection } from '@database';
+import { PartValue, SubSection } from '@models';
 
 /**
  *

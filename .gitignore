@@ -45,11 +45,11 @@ Thumbs.db
 *.env.test
 *.env.production
 *.config.json
+*.config.js
 *.config
 
 # log files
 *.log
 
-# db
-/db
-*.db
+# circleCi - ignore process file for local circleCI testing
+process.yml
