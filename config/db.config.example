@@ -1,9 +1,18 @@
 {
-    "summa-theologica": {
-        "type": "better-sqlite3",
-        "database": "/path/to/db/summa-theologica.db",
-        "logging": [
-            "error"
-        ]
+    "app-name-1": {
+        "db-1-name": {
+            "type": "better-sqlite3",
+            "database": "/path/to/db/db-1.db",
+            "logging": [
+                "error"
+            ]
+        },
+        "db-2-name": {
+            "type": "better-sqlite3",
+            "database": "/path/to/db/db-2.db",
+            "logging": [
+                "error"
+            ]
+        }
     }
 }

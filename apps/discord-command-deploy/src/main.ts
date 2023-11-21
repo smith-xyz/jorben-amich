@@ -29,7 +29,7 @@ if (missing.length) {
     DiscordBotConfigMap<AquinasBotAppName>
   >(PathUtils.resolveToCwd(process.env.DISCORD_BOTS_CONFIG_FILE));
 
-  const discordBotNames = TypeUtils.keys(botsConfig);
+  const discordBotNames = TypeUtils.getTypedKeys(botsConfig);
 
   const botsMap = new Map<DiscordBotNames, DiscordBotConfig>(
     discordBotNames.map((key) => [key, botsConfig[key]])

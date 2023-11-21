@@ -1,7 +1,11 @@
+** create a test bot and a prod bot and use separate config files **
 {
-    "aquinas-bot": {
+    "bot-name-1": {
         "token": "secrts",
         "clientId": "secrets",
-        "guildId": "secrets"
+    },
+    "bot-name-2": {
+        "token": "secrts",
+        "clientId": "secrets",
     }
 }

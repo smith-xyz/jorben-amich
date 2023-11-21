@@ -53,3 +53,9 @@ Thumbs.db
 
 # circleCi - ignore process file for local circleCI testing
 process.yml
+
+# ignoring raw data files - these should just be for local use
+# directories remain to match app folder structuring
+apps/data-load-tool/src/raw-data/**/*
+!apps/data-load-tool/src/raw-data/**/
+!*.gitkeep

@@ -61,7 +61,18 @@ function substringByDelimiters(
   return result.substring(0, endIndex).replace(endDelimiter, '');
 }
 
+function toStringOrDefault(value: string, defaultValue: unknown = null) {
+  const normalized = value.trim();
+  return normalized.length > 0 ? normalized : defaultValue;
+}
+
+function removeExcessiveSpace(value: string) {
+  return value.replaceAll(/\s{2,}/g, ' ');
+}
+
 export const StringUtils = {
   lineJoiner,
   substringByDelimiters,
+  toStringOrDefault,
+  removeExcessiveSpace,
 };

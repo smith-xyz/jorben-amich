@@ -1,4 +1,4 @@
-const keys = Object.keys as <T>(
+const getTypedKeys = Object.keys as <T>(
   obj: T
 ) => (keyof T extends infer U
   ? U extends string
@@ -9,5 +9,5 @@ const keys = Object.keys as <T>(
   : never)[];
 
 export const TypeUtils = {
-  keys,
+  getTypedKeys,
 };

@@ -100,39 +100,65 @@
         "command": "ts-node --project apps/aquinas-bot/tsconfig.app.json -r tsconfig-paths/register -r dotenv/config node_modules/typeorm/cli.js"
       }
     },
-    "migration-generate": {
+    "migration-generate-st": {
       "executor": "nx:run-commands",
       "outputs": [],
       "options": {
         "command": "nx run aquinas-bot:typeorm migration:generate libs/database/src/lib/aquinas-bot/summa-theologica/migrations/ST-Migration -d libs/database/src/lib/aquinas-bot/summa-theologica/SummaTheologica.database.ts"
       }
     },
-    "migration-create": {
+    "migration-generate-scg": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "nx run aquinas-bot:typeorm migration:generate libs/database/src/lib/aquinas-bot/summa-contra-gentiles/migrations/SCG-Migration -d libs/database/src/lib/aquinas-bot/summa-contra-gentiles/SummaContraGentiles.database.ts"
+      }
+    },
+    "migration-create-st": {
       "executor": "nx:run-commands",
       "outputs": [],
       "options": {
         "command": "nx run aquinas-bot:typeorm migration:create libs/database/src/lib/aquinas-bot/summa-theologica/migrations/ST-Migration"
       }
     },
+    "migration-create-scg": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "nx run aquinas-bot:typeorm migration:create libs/database/src/lib/aquinas-bot/summa-contra-gentiles/migrations/SCG-Migration"
+      }
+    },
     "migration-revert": {
       "executor": "nx:run-commands",
       "outputs": [],
       "options": {
-        "command": "nx run aquinas-bot:typeorm migration:revert -d libs/database/src/lib/aquinas-bot/summa-theologica/SummaTheologica.database.ts"
+        "commands": [
+          "nx run aquinas-bot:typeorm migration:revert -d libs/database/src/lib/aquinas-bot/summa-theologica/SummaTheologica.database.ts",
+          "nx run aquinas-bot:typeorm migration:revert -d libs/database/src/lib/aquinas-bot/summa-contra-gentiles/SummaContraGentiles.database.ts"
+        ],
+        "parallel": false
       }
     },
     "migration-run": {
       "executor": "nx:run-commands",
       "outputs": [],
       "options": {
-        "command": "nx run aquinas-bot:typeorm migration:run -d libs/database/src/lib/aquinas-bot/summa-theologica/SummaTheologica.database.ts"
+        "commands": [
+          "nx run aquinas-bot:typeorm migration:run -d libs/database/src/lib/aquinas-bot/summa-theologica/SummaTheologica.database.ts",
+          "nx run aquinas-bot:typeorm migration:run -d libs/database/src/lib/aquinas-bot/summa-contra-gentiles/SummaContraGentiles.database.ts"
+        ],
+        "parallel": false
       }
     },
     "migration-run-fake": {
       "executor": "nx:run-commands",
       "outputs": [],
       "options": {
-        "command": "nx run aquinas-bot:typeorm migration:run --fake -d libs/database/src/lib/aquinas-bot/summa-theologica/SummaTheologica.database.ts"
+        "commands": [
+          "nx run aquinas-bot:typeorm migration:run --fake -d libs/database/src/lib/aquinas-bot/summa-theologica/SummaTheologica.database.ts",
+          "nx run aquinas-bot:typeorm migration:run --fake -d libs/database/src/lib/aquinas-bot/summa-contra-gentiles/SummaContraGentiles.database.ts"
+        ],
+        "parallel": false
       }
     }
   },

@@ -11,6 +11,13 @@ import {
   SubSection,
 } from './summa-theologica';
 
+import {
+  SCGBook,
+  SCGChapter,
+  SCGParagraph,
+  SCGParagraphLatin,
+} from './summa-contra-gentiles';
+
 export function getSummaTheologicaEntities() {
   return [
     Article,
@@ -21,6 +28,10 @@ export function getSummaTheologicaEntities() {
     Question,
     QuestionPrologue,
   ];
+}
+
+export function getSummaContraGentilesEntites() {
+  return [SCGBook, SCGChapter, SCGParagraph, SCGParagraphLatin];
 }
 
 export {
@@ -34,4 +45,8 @@ export {
   PartName,
   PartValue,
   SubSection,
+  SCGBook,
+  SCGChapter,
+  SCGParagraph,
+  SCGParagraphLatin,
 };

@@ -31,6 +31,10 @@ async function loadDbData(appName: string, dbName: string) {
 // load data
 (async () => {
   try {
+    if (process.env.APP_NAME && process.env.DB_NAME) {
+      await loadDbData(process.env.APP_NAME, process.env.DB_NAME);
+      return;
+    }
     await configIterator(dbConfig, loadDbData);
   } catch (err) {
     console.error(err.message);

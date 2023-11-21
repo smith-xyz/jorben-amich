@@ -1,6 +1,6 @@
 import { AquinasBotAppCtx } from '@shared/types';
 import { database } from '@database';
-import { PathUtils } from '@shared/utilities';
+import { PathUtils, TypeUtils } from '@shared/utilities';
 
 export async function createAquinasAppCtx(): Promise<AquinasBotAppCtx> {
   console.log('loading app ctx');
@@ -10,7 +10,10 @@ export async function createAquinasAppCtx(): Promise<AquinasBotAppCtx> {
   console.log('assets directory: ', assetsDir);
 
   console.log('initializing databases');
-  await database['aquinas-bot']['summa-theologica'].initialize();
+  const dbKeys = TypeUtils.getTypedKeys(database['aquinas-bot']);
+  await Promise.all(
+    dbKeys.map((dbKey) => database['aquinas-bot'][dbKey].initialize())
+  );
 
   return {
     appName: 'aquinas-bot',
