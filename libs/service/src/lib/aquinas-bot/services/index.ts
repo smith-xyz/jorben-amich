@@ -1,1 +1,2 @@
-export * from './QuerySummaTheologicaService';
+export * from './SummaTheologicaService';
+export * from './SummaContraGentilesService';

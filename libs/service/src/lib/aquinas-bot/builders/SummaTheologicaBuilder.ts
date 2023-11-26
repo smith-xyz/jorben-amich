@@ -8,7 +8,6 @@ import {
   Article,
   ArticleContent,
 } from '@models';
-import { SummaTheologicaQuery } from '@shared/types';
 import { NumberUtils, StringUtils } from '@shared/utilities';
 import { EntityManager } from 'typeorm';
 
@@ -294,17 +293,5 @@ export class SummaTheologicaBuilder {
     }
 
     return newArticleContent;
-  }
-
-  public static buildStCitation({
-    part,
-    questionNumber,
-    articleNumber,
-    subSection,
-    subSectionValue,
-  }: SummaTheologicaQuery): string {
-    let citation = `ST ${part}, Q. ${questionNumber}, Art. ${articleNumber}, ${subSection}`;
-    if (subSectionValue) citation += ` ${subSectionValue}`;
-    return citation;
   }
 }

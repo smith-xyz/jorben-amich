@@ -1,15 +1,15 @@
 import { AttachmentBuilder } from 'discord.js';
-import { SummaTheologicaService } from '@service';
+import { SummaContraGentilesService } from '@service';
 import { Command } from '@shared/clients';
 import { AquinasInteractionContext } from '@shared/types';
-import { parseSummaTheologicaParams } from '../tools';
 import path from 'path';
-import { summaTheologicaQuerySlashCommand } from '../slash-command-config';
+import { summaContraGentilesQuerySlashCommand } from '../slash-command-config';
+import { parseSummaContraGentilesParams } from '../tools';
 
-export const queryStCommand: Command = {
-  data: summaTheologicaQuerySlashCommand,
+export const querySCGCommand: Command = {
+  data: summaContraGentilesQuerySlashCommand,
   messageTrigger: (message: string) =>
-    message.toLowerCase().startsWith('summa theologica'),
+    message.toLowerCase().startsWith('summa contra gentiles'),
   async execute(ctx: AquinasInteractionContext) {
     const {
       isSlashCommand,
@@ -17,16 +17,16 @@ export const queryStCommand: Command = {
       appCtx: { appVersion, appName, assetsDir },
     } = ctx;
 
-    const parameters = parseSummaTheologicaParams(interaction);
+    const parameters = parseSummaContraGentilesParams(interaction);
 
     if (!parameters) {
       // For now - ignoring and not providing feedback on why
-      console.debug('ST EVENT ERROR: parameters missing');
+      console.debug('SCG EVENT ERROR: parameters missing');
       return;
     }
 
     try {
-      const citation = SummaTheologicaService.buildStCitation(parameters);
+      const citation = SummaContraGentilesService.queryToCitation(parameters);
 
       const thomasIcon = new AttachmentBuilder(
         path.join(assetsDir, `/thumbnails/thomas-icon.png`)
@@ -44,10 +44,12 @@ export const queryStCommand: Command = {
         },
       };
 
-      const stService = new SummaTheologicaService(ctx.appCtx);
-      const stEntry = await stService.getSummaTheologicaEntry(parameters);
+      const scgService = new SummaContraGentilesService(ctx.appCtx);
+      const scgParagraph = await scgService.getSummaContraGentilesParagraph(
+        parameters
+      );
 
-      if (!stEntry || !stEntry.content) {
+      if (!scgParagraph) {
         // on slash commands we can let the user know it wasn't found
         // need to fix how we're trying to do everything under one command
         if (isSlashCommand)
@@ -59,7 +61,9 @@ export const queryStCommand: Command = {
         return;
       }
 
-      embed.description = stEntry.content;
+      embed.description = parameters.latin
+        ? scgParagraph.latinParagraph.content
+        : scgParagraph.content;
 
       await interaction.reply({
         embeds: [embed],
