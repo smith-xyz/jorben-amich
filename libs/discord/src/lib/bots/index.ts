@@ -5,13 +5,14 @@ import {
   pingCommand,
   queryStCommand,
   querySCGCommand,
+  helpCommand,
   events,
 } from './aquinas-bot';
 
 export const aquinasBot = {
   client: AquinasCommandClient,
   appCtxFactory: createAquinasAppCtx,
-  commands: [pingCommand, queryStCommand, querySCGCommand],
+  commands: [pingCommand, queryStCommand, querySCGCommand, helpCommand],
   events,
   intents: [
     GatewayIntentBits.Guilds,

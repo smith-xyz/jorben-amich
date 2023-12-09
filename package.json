@@ -6,7 +6,7 @@
     "build:aquinas-bot": "nx run aquinas-bot:build",
     "serve:aquinas-bot": "nx run aquinas-bot:serve",
     "deploy-slash-commands": "nx run discord-command-deploy:serve",
-    "migration-generation:aquinas-bot": "nx run aquinas-bot:migration-generate"
+    "affected:test": "nx affected -t test"
   },
   "private": true,
   "dependencies": {

@@ -1,21 +1,15 @@
-import { AttachmentBuilder } from 'discord.js';
 import { SummaContraGentilesService } from '@service';
 import { Command } from '@shared/clients';
 import { AquinasInteractionContext } from '@shared/types';
-import path from 'path';
 import { summaContraGentilesQuerySlashCommand } from '../slash-command-config';
-import { parseSummaContraGentilesParams } from '../tools';
+import { createStandardReply, parseSummaContraGentilesParams } from '../tools';
 
 export const querySCGCommand: Command = {
   data: summaContraGentilesQuerySlashCommand,
   messageTrigger: (message: string) =>
     message.toLowerCase().startsWith('summa contra gentiles'),
   async execute(ctx: AquinasInteractionContext) {
-    const {
-      isSlashCommand,
-      interaction,
-      appCtx: { appVersion, appName, assetsDir },
-    } = ctx;
+    const { isSlashCommand, interaction } = ctx;
 
     const parameters = parseSummaContraGentilesParams(interaction);
 
@@ -28,21 +22,11 @@ export const querySCGCommand: Command = {
     try {
       const citation = SummaContraGentilesService.queryToCitation(parameters);
 
-      const thomasIcon = new AttachmentBuilder(
-        path.join(assetsDir, `/thumbnails/thomas-icon.png`)
-      );
-
-      const embed = {
+      const replyOptions = createStandardReply({
+        ctx,
         title: citation,
-        color: 10038562,
-        description: `Hmm...do not remember writing that one.`,
-        footer: {
-          text: `${appName} ${appVersion}`,
-        },
-        thumbnail: {
-          url: `attachment://thomas-icon.png`,
-        },
-      };
+        description: 'Hmm...do not remember writing that one.',
+      });
 
       const scgService = new SummaContraGentilesService(ctx.appCtx);
       const scgParagraph = await scgService.getSummaContraGentilesParagraph(
@@ -52,23 +36,15 @@ export const querySCGCommand: Command = {
       if (!scgParagraph) {
         // on slash commands we can let the user know it wasn't found
         // need to fix how we're trying to do everything under one command
-        if (isSlashCommand)
-          await interaction.reply({
-            embeds: [embed],
-            files: [thomasIcon],
-          });
-
+        if (isSlashCommand) await interaction.reply(replyOptions);
         return;
       }
 
-      embed.description = parameters.latin
+      replyOptions.embeds[0].description = parameters.latin
         ? scgParagraph.latinParagraph.content
         : scgParagraph.content;
 
-      await interaction.reply({
-        embeds: [embed],
-        files: [thomasIcon],
-      });
+      await interaction.reply(replyOptions);
     } catch (err) {
       console.error('SERVICE ERROR: ', err.message);
       // For now - ignoring and not providing feedback on why but its typically formatting of the citation
