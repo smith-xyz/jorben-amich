@@ -7,13 +7,12 @@ services:
     hostname: aquinas-bot
     build:
       dockerfile: ./apps/aquinas-bot/Dockerfile
+      tags:
+        - 'aquinas-bot:latest'
     env_file:
-      - ./apps/aquinas-bot/.env
+      - ./apps/aquinas-bot/.env.production
     ports:
       - 4201:4200
-    volumes:
-      - ./:/app
-      - /app/node_modules
 
 networks:
   default:
