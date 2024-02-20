@@ -2,12 +2,11 @@ import { SummaContraGentilesService } from '@service';
 import { Command } from '@shared/clients';
 import { AquinasInteractionContext } from '@shared/types';
 import { summaContraGentilesQuerySlashCommand } from '../slash-command-config';
-import { createStandardReply, parseSummaContraGentilesParams } from '../tools';
+import { parseSummaContraGentilesParams } from '../tools';
+import { createBaseInteractionReply } from '../views';
 
 export const querySCGCommand: Command = {
   data: summaContraGentilesQuerySlashCommand,
-  messageTrigger: (message: string) =>
-    message.toLowerCase().startsWith('summa contra gentiles'),
   async execute(ctx: AquinasInteractionContext) {
     const { isSlashCommand, interaction } = ctx;
 
@@ -20,9 +19,9 @@ export const querySCGCommand: Command = {
     }
 
     try {
-      const citation = SummaContraGentilesService.queryToCitation(parameters);
+      const citation = SummaContraGentilesService.buildCitation(parameters);
 
-      const replyOptions = createStandardReply({
+      const replyOptions = createBaseInteractionReply({
         ctx,
         title: citation,
         description: 'Hmm...do not remember writing that one.',
@@ -40,9 +39,11 @@ export const querySCGCommand: Command = {
         return;
       }
 
-      replyOptions.embeds[0].description = parameters.latin
-        ? scgParagraph.latinParagraph.content
-        : scgParagraph.content;
+      replyOptions.embeds[0].setDescription(
+        parameters.latin
+          ? scgParagraph.latinParagraph.content
+          : scgParagraph.content
+      );
 
       await interaction.reply(replyOptions);
     } catch (err) {

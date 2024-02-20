@@ -32,6 +32,7 @@ function parseParamsFromInteraction(
   }
 }
 
+/** @description currently not used */
 // example: summa theologica I-II, Q. 1, Art. 1, arg. 1
 function parseParamsFromMessage(interaction: Message): SummaTheologicaQuery {
   const { content } = interaction;

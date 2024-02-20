@@ -17,6 +17,13 @@ export type PartName =
   | 'Second Part of the Second Part (Secunda Secundæ Partis)'
   | 'Third Part (Tertia Pars)';
 
+export const partValueToHyperlinkPart: Record<PartValue, string> = {
+  I: 'FP',
+  'I-II': 'FS',
+  'II-II': 'SS',
+  III: 'TP',
+};
+
 @Entity()
 export class Part {
   @PrimaryGeneratedColumn()

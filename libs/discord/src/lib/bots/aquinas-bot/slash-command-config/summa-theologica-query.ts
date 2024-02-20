@@ -3,7 +3,7 @@ import { SlashCommandBuilder } from 'discord.js';
 export const summaTheologicaQuerySlashCommand = new SlashCommandBuilder()
   .setName('st')
   .setDescription(
-    'Query Summa Theologica. Example usage, /st [part] II-II [question] 23 [article] 3 [subsection] ad. 1'
+    'Query Summa Theologiæ. Example usage, /st [part] II-II [question] 23 [article] 3 [subsection] ad. 1'
   )
   .addStringOption((option) =>
     option

@@ -7,11 +7,10 @@ const defaultFormatter = (
   methodName: string,
   ...args: unknown[]
 ) => {
-  let base = `Class=${klassName} METHOD=${methodName}`;
-  args.forEach(
-    (arg, index) => (base += ` ARG${index + 1}=${JSON.stringify(arg)}`)
+  return (
+    `Class=${klassName} METHOD=${methodName}` +
+    args.map((arg, index) => ` ARG${index + 1}=${JSON.stringify(arg)}`).join('')
   );
-  return base;
 };
 
 export function Log(

@@ -3,9 +3,15 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 
 export type AquinasBotAppName = 'aquinas-bot';
 
-export type AquinasBotDatabaseName =
-  | 'summa-theologica'
-  | 'summa-contra-gentiles';
+export enum AquinasBotDatabaseName {
+  SUMMA_THEOLOGICA = 'summa-theologica',
+  SUMMA_CONTRA_GENTILES = 'summa-contra-gentiles',
+}
+
+export const aquinasBotDbToTitleMap: Record<AquinasBotDatabaseName, string> = {
+  [AquinasBotDatabaseName.SUMMA_THEOLOGICA]: 'Summa Theologiæ',
+  [AquinasBotDatabaseName.SUMMA_CONTRA_GENTILES]: 'Summa Contra Gentiles',
+} as const;
 
 export type AquinasBotDatabase = Record<AquinasBotDatabaseName, DataSource>;
 

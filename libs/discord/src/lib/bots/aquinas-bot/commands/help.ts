@@ -1,25 +1,29 @@
 import { Command } from '@shared/clients';
 import { AquinasInteractionContext } from '@shared/types';
 import { helpSlashCommand } from '../slash-command-config';
-import { createStandardReply } from '../tools';
+import { createBaseInteractionReply } from '../views';
 
-const helpDescription = `
+const buildHelpDescription = ({
+  st,
+  scg,
+  search,
+  ping,
+}: {
+  st: string;
+  scg: string;
+  search: string;
+  ping: string;
+}) => `
 
 __Slash Commands:__
 
-/st - fetch specified entry from _summa theologica_
-/scg - fetch specified entry from _summa contra gentiles_, latin available
-/search - search for entries by keywords
-/settings - configure settings
+</st:${st}> to fetch specified entry from _Summa Theologiæ_.
 
-__Message Events:__
+</scg:${scg}> to fetch specified entry from _Summa Contra Gentiles_, latin available.
 
-If message events are set to on and when a message begins with one of following, aquinas bot will attempt to provide the feedback:
+</search:${search}> for full text search of specific works. This uses an FTS5 search algorithm for the results. For more information [click here](https://www.sqlite.org/fts5.html). Each result will link to St. Isodre library for further reading.
 
-summa theologica <_citation_>
-- e.g. "summa theologica I, Q. 1, Art. 1, co."
-summa contra gentiles <_citation_>
-- e.g. "summa contra gentiles I.20.1" or "summa contra gentiles I.20.1 latin" for latin
+</ping:${ping}> for checking if aquinas bot is running.
 
 __Disclaimers:__
 
@@ -39,10 +43,35 @@ export const helpCommand: Command = {
   data: helpSlashCommand,
   async execute(ctx: AquinasInteractionContext) {
     const { interaction } = ctx;
+    const commandsCollectionCache =
+      interaction.client.application.commands.cache;
+
+    if (commandsCollectionCache.size === 0) {
+      console.debug('refreshing command cache');
+      const commands = await interaction.client.application.commands.fetch();
+      commandsCollectionCache.merge(
+        commands,
+        () => ({ keep: false }),
+        (valueOther) => ({ keep: true, value: valueOther }),
+        (_, valueOther) => ({ keep: true, value: valueOther })
+      );
+    }
+
+    const commandIds = {
+      st: null,
+      scg: null,
+      search: null,
+      ping: null,
+    };
+
+    for (const [, commandConfig] of commandsCollectionCache.entries()) {
+      commandIds[commandConfig.name] = commandConfig.id;
+    }
+
     await interaction.reply(
-      createStandardReply({
+      createBaseInteractionReply({
         ctx,
-        description: helpDescription,
+        description: buildHelpDescription(commandIds),
       })
     );
   },

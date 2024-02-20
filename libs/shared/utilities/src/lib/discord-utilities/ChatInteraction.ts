@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, Message } from 'discord.js';
+import { ChatInputCommandInteraction } from 'discord.js';
 
 // abstraction into one type
-export type ChatInteraction = ChatInputCommandInteraction | Message;
+export type ChatInteraction = ChatInputCommandInteraction;

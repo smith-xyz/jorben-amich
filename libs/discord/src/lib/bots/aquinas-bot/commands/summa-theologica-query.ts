@@ -1,13 +1,12 @@
 import { SummaTheologicaService } from '@service';
 import { Command } from '@shared/clients';
 import { AquinasInteractionContext } from '@shared/types';
-import { createStandardReply, parseSummaTheologicaParams } from '../tools';
+import { parseSummaTheologicaParams } from '../tools';
 import { summaTheologicaQuerySlashCommand } from '../slash-command-config';
+import { createBaseInteractionReply } from '../views';
 
 export const queryStCommand: Command = {
   data: summaTheologicaQuerySlashCommand,
-  messageTrigger: (message: string) =>
-    message.toLowerCase().startsWith('summa theologica'),
   async execute(ctx: AquinasInteractionContext) {
     const { isSlashCommand, interaction } = ctx;
 
@@ -20,9 +19,9 @@ export const queryStCommand: Command = {
     }
 
     try {
-      const citation = SummaTheologicaService.buildStCitation(parameters);
+      const citation = SummaTheologicaService.buildCitation(parameters);
 
-      const replyOptions = createStandardReply({
+      const replyOptions = createBaseInteractionReply({
         ctx,
         title: citation,
         description: 'Hmm...do not remember writing that one.',
@@ -38,7 +37,7 @@ export const queryStCommand: Command = {
         return;
       }
 
-      replyOptions.embeds[0].description = stEntry.content;
+      replyOptions.embeds[0].setDescription(stEntry.content);
 
       await interaction.reply(replyOptions);
     } catch (err) {

@@ -12,6 +12,15 @@ export async function interactionCreate(
       `Action=COMMAND EXEC | TYPE=INTERACTION | NAME=${command.data.name}`
     );
     const { appCtx } = client;
-    await command.execute({ isSlashCommand: true, interaction, appCtx });
+    try {
+      await command.execute({
+        isSlashCommand: true,
+        interaction,
+        appCtx,
+        client,
+      });
+    } catch {
+      console.error('error executing command');
+    }
   }
 }
