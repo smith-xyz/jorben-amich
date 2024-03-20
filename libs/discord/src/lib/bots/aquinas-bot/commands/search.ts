@@ -9,10 +9,11 @@ import { parseSearchParams } from '../tools';
 import { searchSlashCommand } from '../slash-command-config';
 import { ComponentType } from 'discord.js';
 import { SearchViewManager, createBaseInteractionReply } from '../views';
+import { CacheUtils } from '@shared/utilities';
 
 export const searchCommand: Command = {
   data: searchSlashCommand,
-  async execute(ctx: AquinasInteractionContext) {
+  execute: async (ctx: AquinasInteractionContext) => {
     const { interaction, appCtx } = ctx;
 
     const parameters = parseSearchParams(interaction);
@@ -36,7 +37,11 @@ export const searchCommand: Command = {
       switch (parameters.book) {
         case AquinasBotDatabaseName.SUMMA_THEOLOGICA: {
           const stService = new SummaTheologicaService(appCtx);
-          const results = await stService.search(parameters);
+          const results = await CacheUtils.memoizeClassFunction(
+            stService,
+            stService.search,
+            appCtx.cache
+          )(parameters);
           searchResults = results.map(
             SummaTheologicaService.buildCitationWithHyperlink
           );
@@ -44,7 +49,11 @@ export const searchCommand: Command = {
         }
         case AquinasBotDatabaseName.SUMMA_CONTRA_GENTILES: {
           const scgService = new SummaContraGentilesService(appCtx);
-          const results = await scgService.search(parameters);
+          const results = await CacheUtils.memoizeClassFunction(
+            scgService,
+            scgService.search,
+            appCtx.cache
+          )(parameters);
           searchResults = results.map(
             SummaContraGentilesService.buildCitationWithHyperlink
           );

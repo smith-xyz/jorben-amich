@@ -1,5 +1,6 @@
 import { AppCtx, AppDbConfigMap } from '../common';
 import { DataSource, DataSourceOptions } from 'typeorm';
+import { IMemoryCache } from '@cache';
 
 export type AquinasBotAppName = 'aquinas-bot';
 
@@ -15,7 +16,10 @@ export const aquinasBotDbToTitleMap: Record<AquinasBotDatabaseName, string> = {
 
 export type AquinasBotDatabase = Record<AquinasBotDatabaseName, DataSource>;
 
-export type AquinasBotAppCtx = AppCtx<AquinasBotDatabase>;
+export type AquinasBotAppCtx = AppCtx<
+  AquinasBotDatabase,
+  IMemoryCache<string, unknown>
+>;
 
 export type AquinasBotDbConfig = AppDbConfigMap<
   AquinasBotAppName,

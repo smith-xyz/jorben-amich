@@ -1,0 +1,23 @@
+{
+  "name": "@jorben-amich/cache",
+  "version": "1.0.0",
+  "description": "Simple cache handler managed by byte size",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "cache",
+    "node cache",
+    "cache memory"
+  ],
+  "author": {
+    "name": "Shaun Smith"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
+}

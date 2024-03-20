@@ -2,6 +2,7 @@ import { Command } from '@shared/clients';
 import { AquinasInteractionContext } from '@shared/types';
 import { helpSlashCommand } from '../slash-command-config';
 import { createBaseInteractionReply } from '../views';
+import { CacheUtils } from '@shared/utilities';
 
 const buildHelpDescription = ({
   st,
@@ -42,20 +43,15 @@ For any questions, concerns, or bugs please contact Shaun Smith at shaunsmith7@i
 export const helpCommand: Command = {
   data: helpSlashCommand,
   async execute(ctx: AquinasInteractionContext) {
-    const { interaction } = ctx;
-    const commandsCollectionCache =
-      interaction.client.application.commands.cache;
-
-    if (commandsCollectionCache.size === 0) {
-      console.debug('refreshing command cache');
-      const commands = await interaction.client.application.commands.fetch();
-      commandsCollectionCache.merge(
-        commands,
-        () => ({ keep: false }),
-        (valueOther) => ({ keep: true, value: valueOther }),
-        (_, valueOther) => ({ keep: true, value: valueOther })
-      );
-    }
+    const { interaction, appCtx } = ctx;
+    const cache = appCtx.cache;
+    const cacheKey = 'aquinas-bot-commands';
+    const commands = await CacheUtils.memoizeClassFunction(
+      interaction.client.application.commands,
+      interaction.client.application.commands.fetch,
+      cache,
+      cacheKey
+    )();
 
     const commandIds = {
       st: null,
@@ -64,7 +60,7 @@ export const helpCommand: Command = {
       ping: null,
     };
 
-    for (const [, commandConfig] of commandsCollectionCache.entries()) {
+    for (const [, commandConfig] of commands.entries()) {
       commandIds[commandConfig.name] = commandConfig.id;
     }
 
