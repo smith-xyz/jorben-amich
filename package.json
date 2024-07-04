@@ -60,7 +60,7 @@
     "jest-environment-jsdom": "^29.4.1",
     "jest-environment-node": "^29.4.1",
     "nx": "16.9.1",
-    "nx-cloud": "^16.0.4",
+    "nx-cloud": "^19.0.0",
     "prettier": "^2.6.2",
     "react-refresh": "^0.10.0",
     "ts-jest": "29.1.1",
