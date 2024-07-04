@@ -1,13 +1,12 @@
 import { SummaTheologicaService } from '@service';
-import { Command } from '@shared/clients';
-import { AquinasInteractionContext } from '@shared/types';
+import { AquinasBotAppCtx, Command, InteractionContext } from '@shared/types';
 import { parseSummaTheologicaParams } from '../tools';
 import { summaTheologicaQuerySlashCommand } from '../slash-command-config';
 import { createBaseInteractionReply } from '../views';
 
 export const queryStCommand: Command = {
   data: summaTheologicaQuerySlashCommand,
-  async execute(ctx: AquinasInteractionContext) {
+  async execute(ctx: InteractionContext<AquinasBotAppCtx>) {
     const { isSlashCommand, interaction } = ctx;
 
     const parameters = parseSummaTheologicaParams(interaction);

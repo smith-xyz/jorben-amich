@@ -1,9 +1,10 @@
 import { SummaContraGentilesService, SummaTheologicaService } from '@service';
-import { Command } from '@shared/clients';
 import {
   AquinasBotDatabaseName,
-  AquinasInteractionContext,
+  Command,
   aquinasBotDbToTitleMap,
+  InteractionContext,
+  AquinasBotAppCtx,
 } from '@shared/types';
 import { parseSearchParams } from '../tools';
 import { searchSlashCommand } from '../slash-command-config';
@@ -13,7 +14,7 @@ import { CacheUtils } from '@shared/utilities';
 
 export const searchCommand: Command = {
   data: searchSlashCommand,
-  execute: async (ctx: AquinasInteractionContext) => {
+  execute: async (ctx: InteractionContext<AquinasBotAppCtx>) => {
     const { interaction, appCtx } = ctx;
 
     const parameters = parseSearchParams(interaction);

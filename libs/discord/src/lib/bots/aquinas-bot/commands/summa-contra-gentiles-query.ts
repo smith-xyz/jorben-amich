@@ -1,13 +1,12 @@
 import { SummaContraGentilesService } from '@service';
-import { Command } from '@shared/clients';
-import { AquinasInteractionContext } from '@shared/types';
+import { AquinasBotAppCtx, Command, InteractionContext } from '@shared/types';
 import { summaContraGentilesQuerySlashCommand } from '../slash-command-config';
 import { parseSummaContraGentilesParams } from '../tools';
 import { createBaseInteractionReply } from '../views';
 
 export const querySCGCommand: Command = {
   data: summaContraGentilesQuerySlashCommand,
-  async execute(ctx: AquinasInteractionContext) {
+  async execute(ctx: InteractionContext<AquinasBotAppCtx>) {
     const { isSlashCommand, interaction } = ctx;
 
     const parameters = parseSummaContraGentilesParams(interaction);

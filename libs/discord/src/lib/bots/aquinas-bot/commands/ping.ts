@@ -1,5 +1,4 @@
-import { Command } from '@shared/clients';
-import { AquinasInteractionContext } from '@shared/types';
+import { AquinasBotAppCtx, Command, InteractionContext } from '@shared/types';
 import { pingSlashCommand } from '../slash-command-config';
 
 const prayerSnippets = [
@@ -15,7 +14,7 @@ const prayerSnippets = [
 
 export const pingCommand: Command = {
   data: pingSlashCommand,
-  async execute(ctx: AquinasInteractionContext) {
+  async execute(ctx: InteractionContext<AquinasBotAppCtx>) {
     const rand = Math.floor(Math.random() * prayerSnippets.length - 1);
     await ctx.interaction.reply(prayerSnippets[rand]);
   },

@@ -1,16 +1,5 @@
-import { AquinasInteractionContext } from '@shared/types';
-import {
-  APIActionRowComponent,
-  APIActionRowComponentTypes,
-  APIMessageActionRowComponent,
-  ActionRowBuilder,
-  ActionRowData,
-  AttachmentBuilder,
-  EmbedBuilder,
-  JSONEncodable,
-  MessageActionRowComponentBuilder,
-  MessageActionRowComponentData,
-} from 'discord.js';
+import { AquinasBotAppCtx, InteractionContext } from '@shared/types';
+import { AttachmentBuilder, EmbedBuilder } from 'discord.js';
 import path from 'path';
 
 export const globalViewConfig = {
@@ -30,7 +19,7 @@ export function createBaseInteractionReply({
   title = globalViewConfig.title,
   description = '',
 }: {
-  ctx: AquinasInteractionContext;
+  ctx: InteractionContext<AquinasBotAppCtx>;
   title?: string;
   description?: string;
 }) {

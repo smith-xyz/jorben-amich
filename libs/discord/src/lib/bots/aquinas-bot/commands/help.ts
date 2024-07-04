@@ -1,5 +1,4 @@
-import { Command } from '@shared/clients';
-import { AquinasInteractionContext } from '@shared/types';
+import { AquinasBotAppCtx, Command, InteractionContext } from '@shared/types';
 import { helpSlashCommand } from '../slash-command-config';
 import { createBaseInteractionReply } from '../views';
 import { CacheUtils } from '@shared/utilities';
@@ -42,7 +41,7 @@ For any questions, concerns, or bugs please contact Shaun Smith at shaunsmith7@i
 
 export const helpCommand: Command = {
   data: helpSlashCommand,
-  async execute(ctx: AquinasInteractionContext) {
+  async execute(ctx: InteractionContext<AquinasBotAppCtx>) {
     const { interaction, appCtx } = ctx;
     const cache = appCtx.cache;
     const cacheKey = 'aquinas-bot-commands';

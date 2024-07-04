@@ -1,4 +1,4 @@
-import { AppCtx, AppDbConfigMap } from '../common';
+import { AppCtx, AppDbConfigMap } from '../../common';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { IMemoryCache } from '@cache';
 

@@ -1,4 +1,4 @@
 export * from './common';
-export * from './aquinas-bot';
+export * from './apps';
 export * from './discord';
 export * from './database';

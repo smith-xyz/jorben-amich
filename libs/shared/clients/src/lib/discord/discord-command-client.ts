@@ -1,17 +1,7 @@
-import {
-  Client,
-  ClientOptions,
-  Collection,
-  RESTPostAPIChatInputApplicationCommandsJSONBody,
-} from 'discord.js';
+import { Client, ClientOptions, Collection } from 'discord.js';
+import { Command, CommandClient } from '@shared/types';
 
-export interface Command {
-  data: RESTPostAPIChatInputApplicationCommandsJSONBody;
-  messageTrigger?: (message: string) => boolean;
-  execute: (...args: unknown[]) => Promise<void>;
-}
-
-export class DiscordCommandClient extends Client {
+export class DiscordCommandClient extends Client implements CommandClient {
   private readonly _commands: Collection<string, Command> = new Collection();
 
   constructor(options: ClientOptions) {

@@ -1,4 +1,4 @@
-import { FTS5SearchParams } from '../database';
+import { FTS5SearchParams } from '../../database';
 import { AquinasBotDatabaseName } from './AquinasAppCtx';
 
 export type AquinasBotSearchParams = {

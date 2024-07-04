@@ -1,4 +1,4 @@
-import { AquinasBotDatabaseName } from '../aquinas-bot';
+import { AquinasBotDatabaseName } from '../apps/aquinas-bot';
 import { DiscordBotNames } from '../discord';
 
 // add app names here

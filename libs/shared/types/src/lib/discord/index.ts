@@ -1,1 +1,1 @@
-export * from './DiscordBotConfig';
+export * from './DiscordBot';
