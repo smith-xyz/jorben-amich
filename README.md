@@ -9,6 +9,7 @@ Acting as a monorepo, please make every effort to create shared code within the 
 ### Discord Bots
 
 The basic folder structuring for discord bots can be (but is limited to) this:
+```
 ├── readme.md
 └── apps
     └── BotApp
@@ -27,7 +28,7 @@ The basic folder structuring for discord bots can be (but is limited to) this:
                     ├── views
                     ├── index.ts
 
-
+```
 Bot apps are welcome to use anything from the other libs like service, models, and database. Following a similar structure of grouping by app name. Even though the folder structure is following app specific naming, it gives visibility to the usage of the different libs when used by other applications.
 
 #### Aquinas Bot
