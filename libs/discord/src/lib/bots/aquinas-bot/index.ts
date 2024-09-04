@@ -7,6 +7,7 @@ import {
   queryStCommand,
   helpCommand,
   searchCommand,
+  askThomasCommand,
 } from './commands';
 import { events } from './events';
 import { DiscordBot } from '@shared/types';
@@ -20,6 +21,7 @@ export const aquinasBot: DiscordBot = {
     querySCGCommand,
     helpCommand,
     searchCommand,
+    askThomasCommand,
   ],
   events,
   intents: [
