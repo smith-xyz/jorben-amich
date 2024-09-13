@@ -1,26 +1,19 @@
 import { Events } from 'discord.js';
 import { discordBots } from '@discord';
 import { AquinasBotAppCtx } from '@shared/types';
+import { EnvUtils } from '@shared/utilities';
 
 console.log('STARTING THOMAS AQUINAS BOT');
 console.log('Validating Environment Variables are set');
 
-const missing = [
+EnvUtils.envVariableValidator([
   'APP_VERSION',
   'ASSETS_DIR',
   'DISCORD_TOKEN',
   'DISCORD_CLIENT_ID',
   'DB_CONFIG_FILE',
-].filter(
-  (variable) =>
-    !process.env[variable] ||
-    (typeof process.env[variable] === 'string' &&
-      process.env[variable].length === 0)
-);
-
-if (missing.length) {
-  throw new Error(`Missing environment variables: ${missing.join(',')}`);
-}
+  'GOOGLE_AI_API_KEY',
+]);
 
 const { appCtxFactory, client, commands, events, intents } =
   discordBots['aquinas-bot'];

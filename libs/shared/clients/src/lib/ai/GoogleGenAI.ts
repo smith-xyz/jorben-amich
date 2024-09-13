@@ -1,4 +1,9 @@
-import { GenerativeModel, GoogleGenerativeAI } from '@google/generative-ai';
+import {
+  GenerativeModel,
+  GoogleGenerativeAI,
+  HarmBlockThreshold,
+  HarmCategory,
+} from '@google/generative-ai';
 
 export interface GoogleGenAIParams {
   apiKey: string;
@@ -10,7 +15,15 @@ export class GoogleGenAI {
 
   constructor(params: GoogleGenAIParams) {
     const genAI = new GoogleGenerativeAI(params.apiKey);
-    this.model = genAI.getGenerativeModel({ model: params.model });
+    this.model = genAI.getGenerativeModel({
+      model: params.model,
+      safetySettings: [
+        {
+          category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+          threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+        },
+      ],
+    });
   }
 
   public async generateContent(prompt: string): Promise<string> {

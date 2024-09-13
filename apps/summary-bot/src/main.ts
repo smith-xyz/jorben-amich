@@ -1,25 +1,18 @@
-import { Events } from 'discord.js';
+import { Events, GatewayIntentBits, Partials } from 'discord.js';
 import { discordBots } from '@discord';
 import { SummaryBotAppCtx } from '@shared/types';
+import { EnvUtils } from '@shared/utilities';
 
 console.log('STARTING SUMMARY BOT');
 console.log('Validating Environment Variables are set');
 
-const missing = [
+EnvUtils.envVariableValidator([
   'APP_VERSION',
   'ASSETS_DIR',
   'DISCORD_TOKEN',
   'DISCORD_CLIENT_ID',
-].filter(
-  (variable) =>
-    !process.env[variable] ||
-    (typeof process.env[variable] === 'string' &&
-      process.env[variable].length === 0)
-);
-
-if (missing.length) {
-  throw new Error(`Missing environment variables: ${missing.join(',')}`);
-}
+  'GOOGLE_AI_API_KEY',
+]);
 
 const { appCtxFactory, client, commands, events, intents } =
   discordBots['summary-bot'];
@@ -31,7 +24,7 @@ const discordOptions = {
 appCtxFactory().then(start);
 
 function start(appCtx: SummaryBotAppCtx) {
-  const aquinasCommandClient = new client({
+  const summaryBotCommandClient = new client({
     discordOptions,
     appCtx,
   });
@@ -43,22 +36,22 @@ function start(appCtx: SummaryBotAppCtx) {
       );
       continue;
     }
-    aquinasCommandClient.addCommand(command.data.name, command);
+    summaryBotCommandClient.addCommand(command.data.name, command);
   }
 
   console.log('Initializing Events');
   for (const eventType of Object.keys(events)) {
-    aquinasCommandClient.on(
+    summaryBotCommandClient.on(
       eventType,
       async (interaction) =>
-        await events[eventType](aquinasCommandClient, interaction)
+        await events[eventType](summaryBotCommandClient, interaction)
     );
   }
   console.log('Events intialized');
 
-  aquinasCommandClient.once(Events.ClientReady, (c) => {
+  summaryBotCommandClient.once(Events.ClientReady, (c) => {
     console.log(`Ready! Logged in as ${c.user.tag}`);
   });
 
-  aquinasCommandClient.login(process.env.DISCORD_TOKEN);
+  summaryBotCommandClient.login(process.env.DISCORD_TOKEN);
 }

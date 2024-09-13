@@ -5,7 +5,7 @@
 
 import { REST, Routes } from 'discord.js';
 import { discordBots } from '@discord';
-import { FileUtils, PathUtils, TypeUtils } from '@shared/utilities';
+import { EnvUtils, FileUtils, PathUtils, TypeUtils } from '@shared/utilities';
 import {
   AquinasBotAppName,
   DiscordBotConfig,
@@ -13,16 +13,7 @@ import {
   DiscordBotNames,
 } from '@shared/types';
 
-const missing = ['DISCORD_BOTS_CONFIG_FILE'].filter(
-  (variable) =>
-    !process.env[variable] ||
-    (typeof process.env[variable] === 'string' &&
-      process.env[variable].length === 0)
-);
-
-if (missing.length) {
-  throw new Error(`Missing environment variables: ${missing.join(',')}`);
-}
+EnvUtils.envVariableValidator(['DISCORD_BOTS_CONFIG_FILE']);
 
 (async () => {
   const botsConfig = FileUtils.readJSONFile<
