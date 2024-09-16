@@ -9,7 +9,7 @@
       "outputs": [
         "{options.outputPath}"
       ],
-      "defaultConfiguration": "development",
+      "defaultConfiguration": "production",
       "options": {
         "platform": "node",
         "outputPath": "dist/apps/aquinas-bot",
@@ -77,15 +77,10 @@
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "outputs": [
         "{options.outputFile}"
-      ],
-      "options": {
-        "lintFilePatterns": [
-          "apps/aquinas-bot/**/*.ts"
-        ]
-      }
+      ]
     },
     "test": {
       "executor": "@nx/jest:jest",
@@ -93,14 +88,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "apps/aquinas-bot/jest.config.ts",
-        "passWithNoTests": true
-      },
-      "configurations": {
-        "ci": {
-          "ci": true,
-          "codeCoverage": true
-        }
+        "jestConfig": "apps/aquinas-bot/jest.config.ts"
       }
     },
     "typeorm": {

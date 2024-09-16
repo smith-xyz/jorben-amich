@@ -6,22 +6,16 @@
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "development",
       "options": {
         "platform": "node",
         "outputPath": "dist/apps/discord-command-deploy",
-        "format": [
-          "cjs"
-        ],
+        "format": ["cjs"],
         "bundle": false,
         "main": "apps/discord-command-deploy/src/main.ts",
         "tsConfig": "apps/discord-command-deploy/tsconfig.app.json",
-        "assets": [
-          "apps/discord-command-deploy/src/assets"
-        ],
+        "assets": ["apps/discord-command-deploy/src/assets"],
         "generatePackageJson": true,
         "esbuildOptions": {
           "sourcemap": true,
@@ -58,30 +52,14 @@
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
-      "options": {
-        "lintFilePatterns": [
-          "apps/discord-command-deploy/**/*.ts"
-        ]
-      }
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/discord-command-deploy/jest.config.ts",
-        "passWithNoTests": true
-      },
-      "configurations": {
-        "ci": {
-          "ci": true,
-          "codeCoverage": true
-        }
+        "jestConfig": "apps/discord-command-deploy/jest.config.ts"
       }
     }
   },

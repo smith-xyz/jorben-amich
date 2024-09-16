@@ -59,3 +59,5 @@ process.yml
 apps/data-load-tool/src/raw-data/**/*
 !apps/data-load-tool/src/raw-data/**/
 !*.gitkeep
+.nx/cache
+.nx/workspace-data

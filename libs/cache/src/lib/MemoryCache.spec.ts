@@ -26,6 +26,8 @@ function reset(cache: MemoryCache<unknown, unknown>) {
 }
 
 describe('MemoryCache', () => {
+  jest.useFakeTimers();
+
   describe('basic map functionality', () => {
     const cache: MemoryCache<number, TestingType> = new MemoryCache(null, {
       ttl: 50000,
@@ -223,14 +225,14 @@ describe('MemoryCache', () => {
     it('will return null when cached item expires', async () => {
       cache.set(1, smallItem);
 
-      await sleep(1000);
+      jest.advanceTimersByTime(1000);
 
       expect(cache.get(1)).toBeNull();
 
       cache.set(1, smallItem);
       expect(cache.get(1)).toEqual(smallItem);
 
-      await sleep(1000);
+      jest.advanceTimersByTime(1000);
 
       expect(cache.get(1)).toBeNull();
     });
@@ -249,20 +251,16 @@ describe('MemoryCache', () => {
     it('will return null when cached item expires', async () => {
       cache.set(1, smallItem);
 
-      await sleep(1000);
+      jest.advanceTimersByTime(1000);
 
       expect(cache.get(1)).toBeNull();
 
       cache.set(1, smallItem);
       expect(cache.get(1)).toEqual(smallItem);
 
-      await sleep(1000);
+      jest.advanceTimersByTime(1000);
 
       expect(cache.get(1)).toBeNull();
     });
   });
 });
-
-function sleep(time: number) {
-  return new Promise((resolve) => setTimeout(resolve, time));
-}
