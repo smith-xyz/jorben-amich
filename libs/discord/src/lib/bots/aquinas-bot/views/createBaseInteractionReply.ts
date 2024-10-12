@@ -1,4 +1,4 @@
-import { AquinasBotAppCtx, InteractionContext } from '@shared/types';
+import { AquinasBotClient, InteractionContext } from '@shared/types';
 import { AttachmentBuilder, EmbedBuilder } from 'discord.js';
 import path from 'path';
 
@@ -19,13 +19,11 @@ export function createBaseInteractionReply({
   title = globalViewConfig.title,
   description = '',
 }: {
-  ctx: InteractionContext<AquinasBotAppCtx>;
+  ctx: InteractionContext<AquinasBotClient>;
   title?: string;
   description?: string;
 }) {
-  const {
-    appCtx: { assetsDir, appName, appVersion },
-  } = ctx;
+  const { assetsDir, appName, appVersion } = ctx.client.context;
   const thomasIcon = new AttachmentBuilder(
     path.join(assetsDir, `/thumbnails/thomas-icon.png`)
   );

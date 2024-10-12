@@ -230,6 +230,6 @@ export class MemoryCache<K = string, V = unknown>
   }
 
   private startExpires(time: number) {
-    this.intervalJob = setInterval(() => this.clear(), time);
+    this.intervalJob = setInterval(this.clear.bind(this), time);
   }
 }

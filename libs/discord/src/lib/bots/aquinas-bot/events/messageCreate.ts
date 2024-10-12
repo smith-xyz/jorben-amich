@@ -1,8 +1,8 @@
+import { AquinasBotClient } from '@shared/types';
 import { Message } from 'discord.js';
-import { AquinasCommandClient } from '../client';
 
 export async function messageCreate(
-  client: AquinasCommandClient,
+  client: AquinasBotClient,
   interaction: Message
 ) {
   if (interaction.author.bot) return;
@@ -11,7 +11,6 @@ export async function messageCreate(
     console.log(
       `Action=COMMAND EXEC | TYPE=MESSAGE | NAME=${command.data.name}`
     );
-    const { appCtx } = client;
-    await command.execute({ isSlashCommand: false, interaction, appCtx });
+    await command.execute({ isSlashCommand: false, interaction, client });
   }
 }

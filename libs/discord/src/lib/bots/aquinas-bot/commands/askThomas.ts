@@ -1,4 +1,4 @@
-import { AquinasBotAppCtx, Command, InteractionContext } from '@shared/types';
+import { AquinasBotClient, Command, InteractionContext } from '@shared/types';
 import { askThomasSlashCommand } from '../slash-command-config';
 import { GoogleGenAI } from '@shared/clients';
 
@@ -14,7 +14,7 @@ const thomasPrompt = `
 
 export const askThomasCommand: Command = {
   data: askThomasSlashCommand,
-  async execute(ctx: InteractionContext<AquinasBotAppCtx>) {
+  async execute(ctx: InteractionContext<AquinasBotClient>) {
     const { interaction } = ctx;
 
     const userQuestion = interaction.options.getString('question');

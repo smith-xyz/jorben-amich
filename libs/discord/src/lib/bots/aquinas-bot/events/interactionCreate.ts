@@ -1,8 +1,8 @@
+import { AquinasBotClient } from '@shared/types';
 import { ChatInputCommandInteraction } from 'discord.js';
-import { AquinasCommandClient } from '../client';
 
 export async function interactionCreate(
-  client: AquinasCommandClient,
+  client: AquinasBotClient,
   interaction: ChatInputCommandInteraction
 ) {
   if (!interaction.isChatInputCommand()) return;
@@ -11,16 +11,14 @@ export async function interactionCreate(
     console.log(
       `Action=COMMAND EXEC | TYPE=INTERACTION | NAME=${command.data.name}`
     );
-    const { appCtx } = client;
     try {
       await command.execute({
         isSlashCommand: true,
         interaction,
-        appCtx,
         client,
       });
-    } catch {
-      console.error('error executing command');
+    } catch (err) {
+      console.error(`error executing command MSG=${err.message}`);
     }
   }
 }

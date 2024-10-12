@@ -1,9 +1,13 @@
 import { AppName } from './AppDbConfigMap';
 
-export interface AppCtx<DB = unknown, Cache = unknown> {
+type DbBase = {
+  initialize: () => void;
+};
+
+export interface AppCtx<DB = Record<string, DbBase>, Cache = unknown> {
   appName: AppName;
   appVersion: string;
   assetsDir: string;
-  databases: DB;
+  databases?: DB;
   cache?: Cache;
 }

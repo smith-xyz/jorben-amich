@@ -7,7 +7,6 @@ import { REST, Routes } from 'discord.js';
 import { discordBots } from '@discord';
 import { EnvUtils, FileUtils, PathUtils, TypeUtils } from '@shared/utilities';
 import {
-  AquinasBotAppName,
   DiscordBotConfig,
   DiscordBotConfigMap,
   DiscordBotNames,
@@ -17,7 +16,7 @@ EnvUtils.envVariableValidator(['DISCORD_BOTS_CONFIG_FILE']);
 
 (async () => {
   const botsConfig = FileUtils.readJSONFile<
-    DiscordBotConfigMap<AquinasBotAppName>
+    DiscordBotConfigMap<DiscordBotNames>
   >(PathUtils.resolveToCwd(process.env.DISCORD_BOTS_CONFIG_FILE));
 
   const discordBotNames = TypeUtils.getTypedKeys(botsConfig);

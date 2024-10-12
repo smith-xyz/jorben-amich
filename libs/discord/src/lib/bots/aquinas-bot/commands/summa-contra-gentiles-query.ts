@@ -1,13 +1,13 @@
 import { SummaContraGentilesService } from '@service';
-import { AquinasBotAppCtx, Command, InteractionContext } from '@shared/types';
+import { AquinasBotClient, Command, InteractionContext } from '@shared/types';
 import { summaContraGentilesQuerySlashCommand } from '../slash-command-config';
 import { parseSummaContraGentilesParams } from '../tools';
 import { createBaseInteractionReply } from '../views';
 
 export const querySCGCommand: Command = {
   data: summaContraGentilesQuerySlashCommand,
-  async execute(ctx: InteractionContext<AquinasBotAppCtx>) {
-    const { isSlashCommand, interaction } = ctx;
+  async execute(ctx: InteractionContext<AquinasBotClient>) {
+    const { isSlashCommand, interaction, client } = ctx;
 
     const parameters = parseSummaContraGentilesParams(interaction);
 
@@ -26,7 +26,7 @@ export const querySCGCommand: Command = {
         description: 'Hmm...do not remember writing that one.',
       });
 
-      const scgService = new SummaContraGentilesService(ctx.appCtx);
+      const scgService = new SummaContraGentilesService(client.context);
       const scgParagraph = await scgService.getSummaContraGentilesParagraph(
         parameters
       );

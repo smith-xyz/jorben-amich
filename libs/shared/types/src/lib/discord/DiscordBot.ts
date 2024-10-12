@@ -1,6 +1,4 @@
 import {
-  Client,
-  ClientOptions,
   Events,
   GatewayIntentBits,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
@@ -10,23 +8,20 @@ import { AquinasBotAppName } from '../apps/aquinas-bot';
 import { AppCtx } from '../common';
 import { ChatInteraction } from '@shared/utilities';
 
-export interface DiscordBotConfig {
+export interface DiscordBotConfig<T = AppCtx> {
   token: string;
   clientId: string;
   guildId?: string;
+  commands: Command[];
+  intents: GatewayIntentBits[];
+  events: Event;
+  context: T;
 }
 
 export type DiscordBotConfigMap<TAppNames extends string | number | symbol> =
   Record<TAppNames, DiscordBotConfig>;
 
 export type DiscordBotNames = AquinasBotAppName | SummaryBotAppName;
-
-export interface CommandClient extends Client {
-  get commands(): Array<Command>;
-  getCommandByKey: (command: string) => Command;
-  getCommandByMessageTrigger: (message: string) => Command;
-  addCommand: (key: string, command: Command) => void;
-}
 
 export interface Command {
   data: RESTPostAPIChatInputApplicationCommandsJSONBody;
@@ -38,26 +33,17 @@ export type Event = Readonly<{
   [key in Events]?: (...args: unknown[]) => Promise<void> | void;
 }>;
 
-interface DiscordCommandClientConstructor {
-  new ({
-    discordOptions,
-    appCtx,
-  }: {
-    discordOptions: ClientOptions;
-    appCtx: AppCtx;
-  }): CommandClient;
+export interface DiscordBotClient<Ctx = AppCtx> {
+  init: () => Promise<void>;
+  get context(): Ctx;
+  get commands(): Array<Command>;
+  getCommandByKey: (command: string) => Command;
+  getCommandByMessageTrigger: (message: string) => Command;
+  addCommand: (key: string, command: Command) => void;
 }
 
-export interface DiscordBot {
-  client: DiscordCommandClientConstructor;
-  appCtxFactory: () => Promise<AppCtx>;
-  commands: Command[];
-  events: Event;
-  intents: GatewayIntentBits[];
-}
-
-export interface InteractionContext<T = AppCtx> {
+export interface InteractionContext<T = DiscordBotClient<AppCtx>> {
   isSlashCommand: boolean;
   interaction: ChatInteraction;
-  appCtx: T;
+  client: T;
 }

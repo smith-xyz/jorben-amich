@@ -1,6 +1,7 @@
 import { AppCtx, AppDbConfigMap } from '../../common';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { IMemoryCache } from '@cache';
+import { DiscordBotClient } from '../../discord';
 
 export type AquinasBotAppName = 'aquinas-bot';
 
@@ -26,3 +27,5 @@ export type AquinasBotDbConfig = AppDbConfigMap<
   AquinasBotDatabaseName,
   DataSourceOptions
 >;
+
+export type AquinasBotClient = DiscordBotClient<AquinasBotAppCtx>;

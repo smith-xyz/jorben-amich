@@ -1,8 +1,9 @@
 import { ChatInputCommandInteraction } from 'discord.js';
-import { SummaryBotClient } from '../client';
+import { DiscordBotClient } from '@shared/clients';
+import { SummaryBotAppCtx } from '@shared/types';
 
 export async function interactionCreate(
-  client: SummaryBotClient,
+  client: DiscordBotClient<SummaryBotAppCtx>,
   interaction: ChatInputCommandInteraction
 ) {
   if (!interaction.isChatInputCommand()) return;
@@ -11,12 +12,10 @@ export async function interactionCreate(
     console.log(
       `Action=COMMAND EXEC | TYPE=INTERACTION | NAME=${command.data.name}`
     );
-    const { appCtx } = client;
     try {
       await command.execute({
         isSlashCommand: true,
         interaction,
-        appCtx,
         client,
       });
     } catch {

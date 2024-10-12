@@ -26,7 +26,7 @@ function reset(cache: MemoryCache<unknown, unknown>) {
 }
 
 describe('MemoryCache', () => {
-  jest.useFakeTimers();
+  beforeAll(() => jest.useFakeTimers());
 
   describe('basic map functionality', () => {
     const cache: MemoryCache<number, TestingType> = new MemoryCache(null, {
@@ -215,17 +215,17 @@ describe('MemoryCache', () => {
 
   describe('ttl test', () => {
     const cache: MemoryCache<number, TestingType> = new MemoryCache(null, {
-      ttl: 1,
+      ttl: 5,
       maxByteSize: 900,
       resizeStrategy: 'FIRST',
     });
 
     afterEach(() => reset(cache));
 
-    it('will return null when cached item expires', async () => {
+    it('will return null when cached item expires', () => {
       cache.set(1, smallItem);
 
-      jest.advanceTimersByTime(1000);
+      jest.advanceTimersByTime(6000);
 
       expect(cache.get(1)).toBeNull();
 
@@ -234,33 +234,36 @@ describe('MemoryCache', () => {
 
       jest.advanceTimersByTime(1000);
 
-      expect(cache.get(1)).toBeNull();
+      expect(cache.get(1)).not.toBeNull();
     });
   });
 
   describe('cache lifetime test', () => {
-    const cache: MemoryCache<number, TestingType> = new MemoryCache(null, {
-      ttl: 8000,
-      expireCache: 1,
-      maxByteSize: 900,
-      resizeStrategy: 'FIRST',
-    });
+    let cache: MemoryCache<number, TestingType>;
 
     afterEach(() => reset(cache));
 
-    it('will return null when cached item expires', async () => {
+    it('will return null when cached item expires', () => {
+      // not sure why, but the setInterval is lost when this is before the test
+      cache = new MemoryCache(null, {
+        ttl: 60,
+        expireCache: 1,
+        maxByteSize: 900,
+        resizeStrategy: 'FIRST',
+      });
+
       cache.set(1, smallItem);
 
-      jest.advanceTimersByTime(1000);
+      jest.advanceTimersByTime(1200);
 
       expect(cache.get(1)).toBeNull();
 
       cache.set(1, smallItem);
       expect(cache.get(1)).toEqual(smallItem);
 
-      jest.advanceTimersByTime(1000);
+      jest.advanceTimersByTime(500);
 
-      expect(cache.get(1)).toBeNull();
+      expect(cache.get(1)).not.toBeNull();
     });
   });
 });

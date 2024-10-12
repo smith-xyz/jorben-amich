@@ -4,7 +4,7 @@ import {
   Command,
   aquinasBotDbToTitleMap,
   InteractionContext,
-  AquinasBotAppCtx,
+  AquinasBotClient,
 } from '@shared/types';
 import { parseSearchParams } from '../tools';
 import { searchSlashCommand } from '../slash-command-config';
@@ -14,8 +14,9 @@ import { CacheUtils } from '@shared/utilities';
 
 export const searchCommand: Command = {
   data: searchSlashCommand,
-  execute: async (ctx: InteractionContext<AquinasBotAppCtx>) => {
-    const { interaction, appCtx } = ctx;
+  execute: async (ctx: InteractionContext<AquinasBotClient>) => {
+    const { interaction, client } = ctx;
+    const appCtx = client.context;
 
     const parameters = parseSearchParams(interaction);
 
