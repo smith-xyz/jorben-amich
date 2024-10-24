@@ -3,3 +3,4 @@ export * from './NumberUtils';
 export * from './TypeUtils';
 export * from './EnumUtils';
 export * from './CacheUtils';
+export * from './ClassUtils';

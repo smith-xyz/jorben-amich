@@ -1,57 +1,80 @@
-import express, { Express, Response, RequestHandler } from 'express';
+import { pipe } from '@shared/utilities';
+import express, { Express, RequestHandler } from 'express';
 
-interface HttpServerOptions {
+export type ApiVersion = `${'v'}${number}`;
+
+type ApiResourceRecord = Record<
+  string,
+  {
+    version: ApiVersion;
+    routeDefinitions: Partial<Record<HTTPMethod, RouteDefinition>>;
+  }
+>;
+
+export interface HttpServerOpts {
   name: string;
-  port?: number;
-  middlewares?: RequestHandler[];
-  routes: RouteDefinition[];
-  config: any;
+  middleware?: RequestHandler[];
+  resources?: ApiResourceRecord;
 }
 
-interface RouteDefinition<T = Response> {
-  path: string;
-  method: HTTPMethod;
-  middlewares: RequestHandler[];
-  service: () => Promise<T>;
+export interface RouteDefinition {
+  middleware?: RequestHandler[];
+  service: RequestHandler;
 }
 
-type HTTPMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
+type HTTPMethod = 'get' | 'post' | 'put' | 'delete' | 'options' | 'patch';
 
-export function httpServer({
-  name,
-  port = 3000,
-  middlewares,
-  routes,
-  config = {},
-}: HttpServerOptions) {
-  console.log('starting server');
+export type HttpServer = express.Application;
 
+export function httpServer(serverOptions: HttpServerOpts): HttpServer {
   const app = express();
 
-  // add configurations
-
-  // load app level middleware
-  loadAppLevelMiddleware(middlewares, app);
-
-  // load routes
-  loadRoutes(routes, app);
-
-  app.listen(port, () => {
-    console.log(`${name} listening on port ${port}`);
+  pipe(
+    loadAppLevelMiddleware,
+    loadRoutes
+  )({
+    app,
+    serverOptions,
   });
+
+  return app;
 }
 
-function loadAppLevelMiddleware(middlewares: RequestHandler[], app: Express) {
-  for (const middleware of middlewares) {
-    app.use(middleware);
+function loadAppLevelMiddleware({
+  app,
+  serverOptions,
+}: {
+  app: Express;
+  serverOptions: HttpServerOpts;
+}) {
+  const { middleware = [] } = serverOptions;
+  for (const mw of middleware) {
+    app.use(mw);
   }
-  console.log(`${this.name} finished`);
+  return { app, serverOptions };
 }
 
-function loadRoutes(routeDefinitions: RouteDefinition[], app: Express): void {
-  for (const routeDef of routeDefinitions) {
-    const { method, middlewares, path, service } = routeDef;
-    app[method](path, ...middlewares, service);
+function loadRoutes({
+  app,
+  serverOptions,
+}: {
+  app: Express;
+  serverOptions: HttpServerOpts;
+}) {
+  const { resources = {} } = serverOptions;
+  const resourcePaths = Object.keys(resources);
+  if (resourcePaths.length === 0) return { app, serverOptions };
+  const base = '/api';
+
+  for (const resource of resourcePaths) {
+    const { version, routeDefinitions } = resources[resource];
+    const apiPath = `${base}/${version}/${resource}`;
+    const methods = Object.keys(routeDefinitions);
+    for (const method of methods) {
+      const { middleware = [], service } = routeDefinitions[method];
+      app[method](apiPath, ...middleware, service);
+    }
   }
-  console.log(`${this.name} finished`);
+
+  return { app, serverOptions };
 }
