@@ -64,5 +64,6 @@
     }
   },
   "plugins": ["@nxlv/python"],
-  "useInferencePlugins": false
+  "useInferencePlugins": false,
+  "useLegacyCache": true
 }
