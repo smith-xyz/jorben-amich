@@ -85,7 +85,7 @@
     "ts-node": "^10.9.1",
     "typescript": "5.5.4",
     "url-loader": "^4.1.1",
-    "verdaccio": "^5.0.4"
+    "verdaccio": "^5.33.0"
   },
   "engines": {
     "node": ">=18.x"
